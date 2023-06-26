@@ -1,6 +1,7 @@
 -- Cleanup (not anymore)
-DROP TABLE IF EXISTS client;
-DROP TABLE IF EXISTS wot_user;
+-- DROP DATABASE IF EXISTS postgres;
+-- CREATE DATABASE postgres;
+-- USE postgres;
 
 -- Create
 CREATE TABLE client
@@ -12,15 +13,34 @@ CREATE TABLE client
 
 create table wot_user
 (
-    email    varchar(20),
-    firstname VARCHAR(50) NOT NULL,
-    lastname  VARCHAR(50) NOT NULL,
+    email     varchar(20),
+    firstname VARCHAR(50)  NOT NULL,
+    lastname  VARCHAR(50)  NOT NULL,
     primary key (email),
-    role     varchar(10), -- "ADMIN" ou "CLIENT"
-    password varchar(500) not null
+    role      varchar(10), -- "ADMIN" ou "CLIENT"
+    password  varchar(500) not null
 );
 
+create table thing
+(
+    id          SERIAL PRIMARY KEY,
+    title       VARCHAR(100) NOT NULL,
+    description VARCHAR(100) NOT NULL,
+    typeAsJson  TEXT
+);
+
+create table thing_property
+(
+    id             SERIAL PRIMARY KEY,
+    name           VARCHAR(50)  NOT NULL,
+    value          VARCHAR(100) NOT NULL,
+    metadataAsJson TEXT
+);
 
 alter table client
     add column email varchar(20) unique,
     add foreign key (email) references wot_user (email);
+
+alter table thing_property
+    add column thingid SERIAL,
+    add foreign key (thingid) references thing (id);

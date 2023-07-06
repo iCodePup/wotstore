@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
 
 import static com.glg204.wotstore.authentification.domain.WOTUserRole.ADMIN;
 import static com.glg204.wotstore.authentification.domain.WOTUserRole.CLIENT;
@@ -43,6 +44,8 @@ public class WebSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests()
                 .requestMatchers(HttpMethod.GET, "/auth/me").authenticated()
+                .requestMatchers(HttpMethod.POST, "/thinginstore/**").authenticated() //.hasAuthority("ROLE_ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/thinginstore/**").authenticated() //.hasAuthority("ROLE_ADMIN")
 //                .requestMatchers(HttpMethod.POST, "/api/orders").hasAnyAuthority("ROLE_ADMIN", "ROLE_CLIENT")
                 //
                 //  .requestMatchers(HttpMethod.GET, "/auth/me").hasAuthority("ROLE_CLIENT") //TODO IMPORTANT PRECISEER ROLE_
@@ -52,9 +55,16 @@ public class WebSecurityConfig {
                 //.requestMatchers("/", "/error", "/csrf", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs", "/v3/api-docs/**").permitAll()
                 .anyRequest().permitAll();
         http.addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-        http.exceptionHandling(e -> e.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)));
+        //http.exceptionHandling(e -> e.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)));
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.cors().and().csrf().disable();
+        http.cors().configurationSource(c -> {
+            CorsConfiguration corsCfg = new CorsConfiguration();
+            corsCfg.applyPermitDefaultValues();
+            corsCfg.addAllowedOriginPattern("*");
+            corsCfg.addAllowedMethod(CorsConfiguration.ALL);
+            return corsCfg;
+        });
         return http.build();
     }
 

@@ -37,6 +37,15 @@ create table thing_property
     metadataAsJson TEXT
 );
 
+create table thing_in_store
+(
+    id          SERIAL PRIMARY KEY,
+    name        VARCHAR(50)  NOT NULL,
+    description VARCHAR(100) NOT NULL,
+    prix        DECIMAL      NOT NULL
+);
+
+
 alter table client
     add column email varchar(20) unique,
     add foreign key (email) references wot_user (email);
@@ -44,3 +53,9 @@ alter table client
 alter table thing_property
     add column thingid SERIAL,
     add foreign key (thingid) references thing (id);
+
+alter table thing_in_store
+    add column thingid SERIAL NOT NULL,
+    add column clientid INT NULL DEFAULT NULL,
+    add foreign key (thingid) references thing (id),
+    add foreign key (clientid) references client (id);

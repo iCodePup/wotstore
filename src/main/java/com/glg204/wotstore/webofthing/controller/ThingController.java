@@ -1,6 +1,7 @@
 package com.glg204.wotstore.webofthing.controller;
 
 import com.glg204.wotstore.webofthing.dto.ThingDTO;
+import com.glg204.wotstore.webofthing.dto.ThingTypeDTO;
 import com.glg204.wotstore.webofthing.service.ThingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,11 +19,22 @@ public class ThingController {
 
     @GetMapping("")
     public ResponseEntity<List<ThingDTO>> getThings() {
-        return thingService.getThings().map(things -> {
-            return ResponseEntity.ok(things);
-        }).orElseGet(() ->
-                ResponseEntity.notFound().build()
-        );
+        List<ThingDTO> thingDTOList = thingService.getThings();
+        if (thingDTOList.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(thingDTOList);
+        }
+    }
+
+    @GetMapping("/type")
+    public ResponseEntity<List<ThingTypeDTO>> getThingsType() {
+        List<ThingTypeDTO> thingDTOList = thingService.getThingsType();
+        if (thingDTOList.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(thingDTOList);
+        }
     }
 
     @GetMapping("/{type}")
@@ -32,5 +44,4 @@ public class ThingController {
                 ResponseEntity.notFound().build()
         );
     }
-
 }

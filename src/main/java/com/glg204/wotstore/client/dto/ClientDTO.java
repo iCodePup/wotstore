@@ -25,6 +25,17 @@ public class ClientDTO {
     @NotNull
     private String address;
 
+    public ClientDTO() {
+    }
+
+    public ClientDTO(String email, String firstName, String lastName, String telephone, String address) {
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.telephone = telephone;
+        this.address = address;
+    }
+
     public String getTelephone() {
         return telephone;
     }

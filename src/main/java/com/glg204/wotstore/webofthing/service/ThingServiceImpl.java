@@ -2,6 +2,7 @@ package com.glg204.wotstore.webofthing.service;
 
 import com.glg204.wotstore.webofthing.dao.ThingDAO;
 import com.glg204.wotstore.webofthing.dto.ThingDTO;
+import com.glg204.wotstore.webofthing.dto.ThingTypeDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,12 @@ public class ThingServiceImpl implements ThingService {
     }
 
     @Override
-    public Optional<List<ThingDTO>> getThings() {
-        return thingDAO.getThings().map(things -> things.stream().map(thing -> ThingDTOMapper.toDTO(thing)).toList());
+    public List<ThingTypeDTO> getThingsType() {
+        return thingDAO.getThings().stream().map(thing -> ThingTypeDTOMapper.toDTO(thing)).toList();
+    }
+
+    @Override
+    public List<ThingDTO> getThings() {
+        return thingDAO.getThings().stream().map(thing -> ThingDTOMapper.toDTO(thing)).toList();
     }
 }

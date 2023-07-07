@@ -6,12 +6,14 @@ import com.glg204.wotstore.authentification.service.WOTUserService;
 import com.glg204.wotstore.client.dao.ClientDAO;
 import com.glg204.wotstore.client.domain.Client;
 import com.glg204.wotstore.client.dto.ClientDTO;
+import com.glg204.wotstore.webofthing.dto.ThingInStoreDTO;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -48,6 +50,12 @@ public class ClientServiceImpl implements ClientService {
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .map(client -> clientDTOMapper.toDTO(client)).collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean purchaseThingInStore(Principal p, Long thingInStoreId) {
+        Optional<Client> client = clientDAO.getClientByEmail(p.getName());
+        return client.filter(value -> clientDAO.setClientToThingInStore(thingInStoreId, value.getId())).isPresent();
     }
 
 }

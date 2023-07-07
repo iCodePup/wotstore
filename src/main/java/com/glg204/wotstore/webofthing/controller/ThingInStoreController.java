@@ -27,6 +27,13 @@ public class ThingInStoreController {
         return ResponseEntity.ok(thingInStoreDTOList);
     }
 
+    @GetMapping("/available")
+    public ResponseEntity<List<ThingInStoreDTO>> getAvailableThingsInStore() {
+        List<ThingInStoreDTO> thingInStoreDTOList = thingInStoreService.getThingsInStore();
+        thingInStoreDTOList.stream().filter(thingInStoreDTO -> thingInStoreDTO.getClient() == null);
+        return ResponseEntity.ok(thingInStoreDTOList);
+    }
+
     @PostMapping()
     public ResponseEntity<Long> saveThingInStore(@Valid @RequestBody ThingInStoreDTO thingInStoreDTO) {
         return thingInStoreService.save(thingInStoreDTO).map(id -> ResponseEntity.ok(id)).orElseGet(() ->

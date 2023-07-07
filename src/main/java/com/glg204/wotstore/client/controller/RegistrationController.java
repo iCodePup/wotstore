@@ -41,27 +41,24 @@ public class RegistrationController {
 
     @PostMapping()
     public ResponseEntity<AuthDTO> createAccount(@Valid @RequestBody ClientDTO clientDTO) {
+
         try {
-            try {
-                clientService.save(passwordEncoder, clientDTO);
-                String token = authenticateAndGetToken(clientDTO.getEmail(), clientDTO.getPassword());
-                WOTUserDTO registeredClientDTO =
-                        new WOTUserDTO(
-                                clientDTO.getEmail(),
-                                clientDTO.getFirstName(),
-                                clientDTO.getLastName(),
-                                "CLIENT");
-                AuthDTO registeredDTO = new AuthDTO(registeredClientDTO, token);
-                return ResponseEntity.ok(registeredDTO);
-            } catch (EmailAlreadyExistsException e) {
-                return ResponseEntity
-                        .status(HttpStatus.CONFLICT)
-                        .body(null);
-            }
-        } catch (Exception e) {
-            e.printStackTrace(); //todo to be removed debug purpose
+            clientService.save(passwordEncoder, clientDTO);
+            String token = authenticateAndGetToken(clientDTO.getEmail(), clientDTO.getPassword());
+            WOTUserDTO registeredClientDTO =
+                    new WOTUserDTO(
+                            clientDTO.getEmail(),
+                            clientDTO.getFirstName(),
+                            clientDTO.getLastName(),
+                            "CLIENT");
+            AuthDTO registeredDTO = new AuthDTO(registeredClientDTO, token);
+            return ResponseEntity.ok(registeredDTO);
+        } catch (EmailAlreadyExistsException e) {
+            return ResponseEntity
+                    .status(HttpStatus.CONFLICT)
+                    .body(null);
         }
-        return ResponseEntity.ok(null);
+
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

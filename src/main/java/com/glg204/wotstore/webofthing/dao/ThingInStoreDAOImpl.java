@@ -1,5 +1,7 @@
 package com.glg204.wotstore.webofthing.dao;
 
+import com.glg204.wotstore.client.dao.ClientDAO;
+import com.glg204.wotstore.client.domain.Client;
 import com.glg204.wotstore.webofthing.domain.ThingInStore;
 import io.webthings.webthing.Thing;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,10 @@ public class ThingInStoreDAOImpl implements ThingInStoreDAO {
 
     @Autowired
     ThingDAO thingDAO;
+
+
+    @Autowired
+    ClientDAO clientDAO;
 
     @Override
     public Optional<ThingInStore> getThingInStoreById(Long id) {
@@ -54,6 +60,10 @@ public class ThingInStoreDAOImpl implements ThingInStoreDAO {
                             String.valueOf(row.get("description")),
                             Double.parseDouble(row.get("prix").toString()),
                             thing);
+                    Optional<Client> optionalClient = clientDAO.getById(Long.parseLong(row.get("clientid").toString()));
+                    if(optionalClient.isPresent()){
+                        t.setClient(optionalClient.get());
+                    }
                     return t;
                 });
 

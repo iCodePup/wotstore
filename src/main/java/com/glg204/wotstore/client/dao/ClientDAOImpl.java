@@ -5,6 +5,8 @@ import com.glg204.wotstore.authentification.domain.WOTUser;
 import com.glg204.wotstore.client.domain.Client;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -59,6 +61,35 @@ public class ClientDAOImpl implements ClientDAO {
             }).toList();
         } catch (EmptyResultDataAccessException e) {
             return new ArrayList<>();
+        }
+    }
+
+    @Override
+    public Optional<Client> getClientByEmail(String email) {
+        try {
+            Client client = jdbcTemplate.queryForObject("select * from client where email = ?",
+                    BeanPropertyRowMapper.newInstance(Client.class), email);
+            return Optional.of(client);
+        } catch (IncorrectResultSizeDataAccessException e) {
+            return Optional.empty();
+        }
+    }
+
+    @Override
+    public boolean setClientToThingInStore(Long thingInStoreId, Long clientId) {
+        String sql = "UPDATE thing_in_store SET clientid = ? WHERE id = ?";
+        Object[] args = new Object[]{clientId, thingInStoreId};
+        return jdbcTemplate.update(sql, args) == 1;
+    }
+
+    @Override
+    public Optional<Client> getById(long clientid) {
+        try {
+            Client client = jdbcTemplate.queryForObject("select * from client where id = ?",
+                    BeanPropertyRowMapper.newInstance(Client.class), clientid);
+            return Optional.of(client);
+        } catch (IncorrectResultSizeDataAccessException e) {
+            return Optional.empty();
         }
     }
 

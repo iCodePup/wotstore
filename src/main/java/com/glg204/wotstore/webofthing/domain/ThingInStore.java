@@ -25,6 +25,15 @@ public class ThingInStore {
         this.thing = thing;
     }
 
+    public ThingInStore(Long id, String name, String description, Double prix, Thing thing,Client client) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.prix = prix;
+        this.thing = thing;
+        this.client = client;
+    }
+
     public Long getId() {
         return id;
     }

@@ -1,5 +1,7 @@
 package com.glg204.wotstore.webofthing.dto;
 
+import com.glg204.wotstore.client.dto.ClientDTO;
+
 public class ThingInStoreDTO {
 
     private Long id;
@@ -7,6 +9,7 @@ public class ThingInStoreDTO {
     private String name;
     private String description;
     private Double prix;
+    private ClientDTO client;
 
     public ThingInStoreDTO() {}
 
@@ -16,6 +19,23 @@ public class ThingInStoreDTO {
         this.name = name;
         this.description = description;
         this.prix = prix;
+    }
+
+    public ThingInStoreDTO(Long id, String thingId, String name, String description, Double prix, ClientDTO client) {
+        this.id = id;
+        this.thingId = thingId;
+        this.name = name;
+        this.description = description;
+        this.prix = prix;
+        this.client = client;
+    }
+
+    public ClientDTO getClient() {
+        return client;
+    }
+
+    public void setClient(ClientDTO client) {
+        this.client = client;
     }
 
     public Long getId() {

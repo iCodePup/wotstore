@@ -6,11 +6,16 @@ import java.util.Optional;
 
 public class Client {
 
+    private Long id;
+
     private WOTUser wotUser;
 
     private String telephone;
 
     private String address;
+
+    public Client() {
+    }
 
     public Client(WOTUser wotUser) {
         this.wotUser = wotUser;
@@ -25,6 +30,14 @@ public class Client {
         this.wotUser = wotUser;
         this.telephone = telephone;
         this.address = address;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getTelephone() {

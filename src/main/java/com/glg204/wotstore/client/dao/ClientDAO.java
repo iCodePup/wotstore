@@ -11,4 +11,10 @@ public interface ClientDAO {
     Integer save(Client client);
 
     List<Optional<Client>> getClients();
+
+    Optional<Client> getClientByEmail(String name);
+
+    boolean setClientToThingInStore(Long id, Long id1);
+
+    Optional<Client> getById(long clientid);
 }

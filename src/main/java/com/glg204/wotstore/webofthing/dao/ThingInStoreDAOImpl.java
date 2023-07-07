@@ -23,7 +23,6 @@ public class ThingInStoreDAOImpl implements ThingInStoreDAO {
     @Autowired
     ThingDAO thingDAO;
 
-
     @Autowired
     ClientDAO clientDAO;
 
@@ -60,9 +59,11 @@ public class ThingInStoreDAOImpl implements ThingInStoreDAO {
                             String.valueOf(row.get("description")),
                             Double.parseDouble(row.get("prix").toString()),
                             thing);
-                    Optional<Client> optionalClient = clientDAO.getById(Long.parseLong(row.get("clientid").toString()));
-                    if(optionalClient.isPresent()){
-                        t.setClient(optionalClient.get());
+                    if (row.get("clientid") != null) {
+                        Optional<Client> optionalClient = clientDAO.getById(Long.parseLong(row.get("clientid").toString()));
+                        if (optionalClient.isPresent()) {
+                            t.setClient(optionalClient.get());
+                        }
                     }
                     return t;
                 });

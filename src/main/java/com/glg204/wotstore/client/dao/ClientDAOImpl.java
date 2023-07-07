@@ -3,6 +3,8 @@ package com.glg204.wotstore.client.dao;
 import com.glg204.wotstore.authentification.dao.WOTUserDAO;
 import com.glg204.wotstore.authentification.domain.WOTUser;
 import com.glg204.wotstore.client.domain.Client;
+import com.glg204.wotstore.webofthing.domain.ThingInStore;
+import io.webthings.webthing.Thing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
@@ -84,11 +86,18 @@ public class ClientDAOImpl implements ClientDAO {
 
     @Override
     public Optional<Client> getById(long clientid) {
+        String sqlGetClient = "select * from client where id = ?";
         try {
-            Client client = jdbcTemplate.queryForObject("select * from client where id = ?",
-                    BeanPropertyRowMapper.newInstance(Client.class), clientid);
-            return Optional.of(client);
-        } catch (IncorrectResultSizeDataAccessException e) {
+            Optional<Client> client = jdbcTemplate.queryForObject(sqlGetClient, new Object[]{clientid}, (rs, rowNum) -> {
+                WOTUser wotUser = wotUserDAO.findByEmail(String.valueOf(rs.getString("email"))).get();
+                Client c = new Client(
+                        wotUser,
+                        String.valueOf(rs.getString("telephone")),
+                        String.valueOf(rs.getString("address")));
+                return Optional.of(c);
+            });
+            return client;
+        } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
         }
     }

@@ -30,7 +30,7 @@ public class ThingInStoreController {
     @GetMapping("/available")
     public ResponseEntity<List<ThingInStoreDTO>> getAvailableThingsInStore() {
         List<ThingInStoreDTO> thingInStoreDTOList = thingInStoreService.getThingsInStore();
-        thingInStoreDTOList.stream().filter(thingInStoreDTO -> thingInStoreDTO.getClient() == null);
+        thingInStoreDTOList = thingInStoreDTOList.stream().filter(thingInStoreDTO -> thingInStoreDTO.getClient() == null).toList();
         return ResponseEntity.ok(thingInStoreDTOList);
     }
 

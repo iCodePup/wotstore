@@ -9,26 +9,21 @@ public class ThingInStoreDTO {
     private String name;
     private String description;
     private Double prix;
+    private boolean started;
     private ClientDTO client;
 
-    public ThingInStoreDTO() {}
+    public ThingInStoreDTO() {
+    }
 
-    public ThingInStoreDTO(Long id, String thingId, String name, String description, Double prix) {
+    public ThingInStoreDTO(Long id, String thingId, String name, String description, Double prix, boolean started) {
         this.id = id;
         this.thingId = thingId;
         this.name = name;
         this.description = description;
         this.prix = prix;
+        this.started = started;
     }
 
-    public ThingInStoreDTO(Long id, String thingId, String name, String description, Double prix, ClientDTO client) {
-        this.id = id;
-        this.thingId = thingId;
-        this.name = name;
-        this.description = description;
-        this.prix = prix;
-        this.client = client;
-    }
 
     public ClientDTO getClient() {
         return client;
@@ -76,5 +71,13 @@ public class ThingInStoreDTO {
 
     public void setPrix(Double prix) {
         this.prix = prix;
+    }
+
+    public boolean isStarted() {
+        return started;
+    }
+
+    public void setStarted(boolean started) {
+        this.started = started;
     }
 }

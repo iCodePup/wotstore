@@ -13,25 +13,22 @@ public class ThingInStore {
 
     private Double prix;
 
+    private boolean started;
+
     private Thing thing;
 
     private Client client;
 
-    public ThingInStore(Long id, String name, String description, Double prix, Thing thing) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.prix = prix;
-        this.thing = thing;
+    public ThingInStore() {
     }
 
-    public ThingInStore(Long id, String name, String description, Double prix, Thing thing,Client client) {
+    public ThingInStore(Long id, String name, String description, Double prix, boolean started, Thing thing) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.prix = prix;
+        this.started = started;
         this.thing = thing;
-        this.client = client;
     }
 
     public Long getId() {
@@ -80,5 +77,13 @@ public class ThingInStore {
 
     public void setClient(Client client) {
         this.client = client;
+    }
+
+    public boolean isStarted() {
+        return started;
+    }
+
+    public void setStarted(boolean started) {
+        this.started = started;
     }
 }

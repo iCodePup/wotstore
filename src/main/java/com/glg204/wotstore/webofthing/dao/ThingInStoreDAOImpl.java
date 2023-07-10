@@ -36,8 +36,9 @@ public class ThingInStoreDAOImpl implements ThingInStoreDAO {
                 String name = rs.getString("name");
                 String desc = rs.getString("description");
                 Double prix = rs.getDouble("prix");
+                boolean started = rs.getBoolean("started");
                 return optionalThing.map(thing -> new ThingInStore(
-                        aId, name, desc, prix,
+                        aId, name, desc, prix,started,
                         thing));
             });
             return thingInStore;
@@ -58,6 +59,7 @@ public class ThingInStoreDAOImpl implements ThingInStoreDAO {
                             String.valueOf(row.get("name")),
                             String.valueOf(row.get("description")),
                             Double.parseDouble(row.get("prix").toString()),
+                            Boolean.parseBoolean(row.get("started").toString()),
                             thing);
                     if (row.get("clientid") != null) {
                         Optional<Client> optionalClient = clientDAO.getById(Long.parseLong(row.get("clientid").toString()));
@@ -100,5 +102,29 @@ public class ThingInStoreDAOImpl implements ThingInStoreDAO {
         String sql = "delete from thing_in_store where id = ?";
         Object[] args = new Object[]{id};
         return jdbcTemplate.update(sql, args) == 1;
+    }
+
+    @Override
+    public List<Optional<ThingInStore>> getClientThingsInStore(Client client) {
+        String sqlGetThingInStore = "select * from thing_in_store where clientid = ?";
+        try {
+            List<Optional<ThingInStore>> thingsInStore = jdbcTemplate.queryForList(sqlGetThingInStore, new Object[]{client.getId()}).stream().map(row -> {
+                Optional<Thing> optionalThing = thingDAO.getById(Long.parseLong(row.get("thingid").toString()));
+                return optionalThing.map(thing -> {
+                    ThingInStore t = new ThingInStore(
+                            Long.parseLong(row.get("id").toString()),
+                            String.valueOf(row.get("name")),
+                            String.valueOf(row.get("description")),
+                            Double.parseDouble(row.get("prix").toString()),
+                            Boolean.parseBoolean(row.get("started").toString()),
+                            thing);
+                    t.setClient(client);
+                    return t;
+                });
+            }).toList();
+            return thingsInStore;
+        } catch (EmptyResultDataAccessException e) {
+            return new ArrayList<>();
+        }
     }
 }

@@ -24,4 +24,10 @@ public interface ClientService   {
     List<ClientDTO> getClients();
 
     boolean purchaseThingInStore(Principal p, Long id);
+
+    List<ThingInStoreDTO> getClientThingsInStore(Principal p);
+
+    boolean startThingInStore(Long thingInStoreId);
+
+    boolean stopThingInStore(Long thingInStoreId);
 }

@@ -1,5 +1,6 @@
 package com.glg204.wotstore.webofthing.dao;
 
+import com.glg204.wotstore.client.domain.Client;
 import com.glg204.wotstore.webofthing.domain.ThingInStore;
 import org.springframework.stereotype.Repository;
 
@@ -16,4 +17,7 @@ public interface ThingInStoreDAO {
     Long save(ThingInStore thingInStore);
 
     Boolean delete(Long id);
+
+    List<Optional<ThingInStore>> getClientThingsInStore(Client client);
+
 }

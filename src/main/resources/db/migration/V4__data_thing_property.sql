@@ -32,6 +32,6 @@ VALUES ('TemperatureProperty',
 
 INSERT INTO thing_property(name, value, thingid, metadataasjson)
 VALUES ('MotionProperty',
-        '20',
+        'false',
         5,
         '{"unit":"boolean","@type":"MotionProperty","description":"The current motion status", "readOnly":false,"title":"Motion","type":"boolean"}');

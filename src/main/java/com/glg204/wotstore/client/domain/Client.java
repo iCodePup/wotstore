@@ -21,12 +21,14 @@ public class Client {
         this.wotUser = wotUser;
     }
 
-    public Client(String telephone, String address) {
+    public Client(WOTUser wotUser, String telephone, String address) {
+        this.wotUser = wotUser;
         this.telephone = telephone;
         this.address = address;
     }
 
-    public Client(WOTUser wotUser, String telephone, String address) {
+    public Client(Long id, WOTUser wotUser, String telephone, String address) {
+        this.id = id;
         this.wotUser = wotUser;
         this.telephone = telephone;
         this.address = address;

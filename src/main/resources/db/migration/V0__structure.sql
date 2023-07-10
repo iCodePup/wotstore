@@ -42,7 +42,8 @@ create table thing_in_store
     id          SERIAL PRIMARY KEY,
     name        VARCHAR(50)  NOT NULL,
     description VARCHAR(100) NOT NULL,
-    prix        DECIMAL      NOT NULL
+    prix        DECIMAL      NOT NULL,
+    started     BOOLEAN      DEFAULT FALSE
 );
 
 

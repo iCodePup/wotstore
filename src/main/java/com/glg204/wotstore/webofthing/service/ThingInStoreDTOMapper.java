@@ -20,6 +20,7 @@ public class ThingInStoreDTOMapper {
                 thingInStoreDTO.getName(),
                 thingInStoreDTO.getDescription(),
                 thingInStoreDTO.getPrix(),
+                thingInStoreDTO.isStarted(),
                 thing);
     }
 
@@ -30,7 +31,8 @@ public class ThingInStoreDTOMapper {
                 thingInStore.getThing().getId(),
                 thingInStore.getName(),
                 thingInStore.getDescription(),
-                thingInStore.getPrix());
+                thingInStore.getPrix(),
+                thingInStore.isStarted());
         if (c != null) {
             ClientDTO clientDTO = clientDTOMapper.toDTO(thingInStore.getClient());
             thingInStoreDTO.setClient(clientDTO);

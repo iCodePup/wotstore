@@ -54,6 +54,7 @@ public class ClientDAOImpl implements ClientDAO {
                 return wotUserDAO.findByEmail(String.valueOf(row.get("email"))).map(wtUser -> {
                     WOTUser wotUser = wotUserDAO.findByEmail(String.valueOf(row.get("email"))).get();
                     Client c = new Client(
+                            Long.parseLong(row.get("id").toString()),
                             wotUser,
                             String.valueOf(row.get("telephone")),
                             String.valueOf(row.get("address")));
@@ -69,9 +70,19 @@ public class ClientDAOImpl implements ClientDAO {
     @Override
     public Optional<Client> getClientByEmail(String email) {
         try {
-            Client client = jdbcTemplate.queryForObject("select * from client where email = ?",
-                    BeanPropertyRowMapper.newInstance(Client.class), email);
-            return Optional.of(client);
+            return jdbcTemplate.queryForObject("select * from client where email = ?", new Object[]{email}, (rs, rowNum) -> {
+                Optional<WOTUser> wotUser = wotUserDAO.findByEmail(String.valueOf(rs.getString("email")));
+                if (wotUser.isPresent()) {
+                    Client c = new Client(
+                            rs.getLong("id"),
+                            wotUser.get(),
+                            rs.getString("telephone"),
+                            rs.getString("address"));
+                    return Optional.of(c);
+                } else {
+                    return Optional.empty();
+                }
+            });
         } catch (IncorrectResultSizeDataAccessException e) {
             return Optional.empty();
         }
@@ -88,18 +99,29 @@ public class ClientDAOImpl implements ClientDAO {
     public Optional<Client> getById(long clientid) {
         String sqlGetClient = "select * from client where id = ?";
         try {
-            Optional<Client> client = jdbcTemplate.queryForObject(sqlGetClient, new Object[]{clientid}, (rs, rowNum) -> {
-                WOTUser wotUser = wotUserDAO.findByEmail(String.valueOf(rs.getString("email"))).get();
-                Client c = new Client(
-                        wotUser,
-                        String.valueOf(rs.getString("telephone")),
-                        String.valueOf(rs.getString("address")));
-                return Optional.of(c);
+            return jdbcTemplate.queryForObject(sqlGetClient, new Object[]{clientid}, (rs, rowNum) -> {
+                Optional<WOTUser> wotUser = wotUserDAO.findByEmail(String.valueOf(rs.getString("email")));
+                if (wotUser.isPresent()) {
+                    Client c = new Client(
+                            rs.getLong("id"),
+                            wotUser.get(),
+                            rs.getString("telephone"),
+                            rs.getString("address"));
+                    return Optional.of(c);
+                } else {
+                    return Optional.empty();
+                }
             });
-            return client;
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
         }
+    }
+
+    @Override
+    public boolean setStatusToThingInStore(Long thingInStoreId, boolean started) {
+        String sql = "UPDATE thing_in_store SET started = ? WHERE id = ?";
+        Object[] args = new Object[]{started, thingInStoreId};
+        return jdbcTemplate.update(sql, args) == 1;
     }
 
 }

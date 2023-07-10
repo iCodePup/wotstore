@@ -21,7 +21,7 @@ public class ThingController {
     public ResponseEntity<List<ThingDTO>> getThings() {
         List<ThingDTO> thingDTOList = thingService.getThings();
         if (thingDTOList.isEmpty()) {
-            return ResponseEntity.ok(thingDTOList); //todo   return ResponseEntity.notFound().build();
+            return ResponseEntity.ok(thingDTOList); //todo   return ResponseEntity.notFound().build(); (frontend part)
         } else {
             return ResponseEntity.ok(thingDTOList);
         }

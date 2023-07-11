@@ -10,6 +10,8 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -23,6 +25,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+
 @Component
 public class TokenProvider {
 
@@ -31,6 +34,8 @@ public class TokenProvider {
 
     @Value("${app.jwt.expiration.minutes}")
     private Long jwtExpirationMinutes;
+
+    private Logger logger = LoggerFactory.getLogger(TokenProvider.class);
 
     public String generate(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
@@ -68,8 +73,7 @@ public class TokenProvider {
 
             return Optional.of(jws);
         } catch (Exception exception) {
-            exception.printStackTrace();
-            //log.error("Request to parse expired JWT : {} failed : {}", token, exception.getMessage());
+            logger.info("Request to parse expired JWT : {} failed : {}", token, exception.getMessage());
         }
         return Optional.empty();
     }

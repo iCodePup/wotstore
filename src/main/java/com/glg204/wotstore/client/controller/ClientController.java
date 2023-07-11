@@ -1,30 +1,17 @@
 package com.glg204.wotstore.client.controller;
 
-import com.glg204.wotstore.authentification.dto.AuthDTO;
-import com.glg204.wotstore.authentification.dto.WOTUserDTO;
-import com.glg204.wotstore.authentification.exception.EmailAlreadyExistsException;
 import com.glg204.wotstore.client.dto.ClientDTO;
 import com.glg204.wotstore.client.service.ClientService;
-import com.glg204.wotstore.config.TokenProvider;
-import com.glg204.wotstore.webofthing.dto.ThingDTO;
 import com.glg204.wotstore.webofthing.dto.ThingInStoreDTO;
-import io.webthings.webthing.Thing;
-import io.webthings.webthing.WebThingServer;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

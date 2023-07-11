@@ -1,7 +1,6 @@
 package com.glg204.wotstore.authentification.dto;
 
 import jakarta.validation.constraints.NotNull;
-import org.springframework.lang.NonNull;
 
 public class LoginDTO {
 

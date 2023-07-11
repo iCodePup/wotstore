@@ -19,5 +19,4 @@ public interface ClientDAO {
     Optional<Client> getById(long clientid);
 
     boolean setStatusToThingInStore(Long thingInStoreId, boolean started);
-
 }

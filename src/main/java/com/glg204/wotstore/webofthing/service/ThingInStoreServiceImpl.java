@@ -2,13 +2,11 @@ package com.glg204.wotstore.webofthing.service;
 
 import com.glg204.wotstore.webofthing.dao.ThingDAO;
 import com.glg204.wotstore.webofthing.dao.ThingInStoreDAO;
-import com.glg204.wotstore.webofthing.domain.ThingInStore;
 import com.glg204.wotstore.webofthing.dto.ThingInStoreDTO;
 import io.webthings.webthing.Thing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;

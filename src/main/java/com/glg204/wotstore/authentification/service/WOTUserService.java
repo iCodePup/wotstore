@@ -8,7 +8,6 @@ import java.util.Optional;
 
 public interface WOTUserService {
 
-
     public Optional<WOTUser> getUserByUsername(String username);
 
     public boolean existsByEmail(String email);

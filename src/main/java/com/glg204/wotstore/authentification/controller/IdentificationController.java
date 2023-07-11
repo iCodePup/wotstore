@@ -4,10 +4,7 @@ import com.glg204.wotstore.authentification.domain.WOTUser;
 import com.glg204.wotstore.authentification.dto.AuthDTO;
 import com.glg204.wotstore.authentification.dto.LoginDTO;
 import com.glg204.wotstore.authentification.dto.WOTUserDTO;
-import com.glg204.wotstore.authentification.exception.EmailAlreadyExistsException;
 import com.glg204.wotstore.authentification.service.WOTUserService;
-import com.glg204.wotstore.client.dto.ClientDTO;
-import com.glg204.wotstore.client.service.ClientService;
 import com.glg204.wotstore.config.TokenProvider;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -33,15 +29,8 @@ public class IdentificationController {
     @Autowired
     private WOTUserService wotUserService;
 
-
-    @Autowired
-    private ClientService clientService;
-
     @Autowired
     private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private TokenProvider tokenProvider;
@@ -78,7 +67,6 @@ public class IdentificationController {
         return tokenProvider.generate(authentication);
     }
 
-
     @GetMapping("/me")
     public ResponseEntity<WOTUserDTO> identification(Principal p) {
         Optional<WOTUser> wotUserOptional = wotUserService.getUserByUsername(p.getName());
@@ -86,5 +74,4 @@ public class IdentificationController {
                 ResponseEntity.ok(new WOTUserDTO(wotUser.getEmail(), wotUser.getFirstName(), wotUser.getLastName(), wotUser.getRole().name()))
         ).orElseGet(() -> ResponseEntity.ok(null));
     }
-
 }

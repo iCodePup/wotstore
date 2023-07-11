@@ -2,8 +2,6 @@ package com.glg204.wotstore.client.domain;
 
 import com.glg204.wotstore.authentification.domain.WOTUser;
 
-import java.util.Optional;
-
 public class Client {
 
     private Long id;

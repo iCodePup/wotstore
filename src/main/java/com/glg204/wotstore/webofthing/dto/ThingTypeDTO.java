@@ -1,7 +1,5 @@
 package com.glg204.wotstore.webofthing.dto;
 
-import com.fasterxml.jackson.databind.JsonNode;
-
 public class ThingTypeDTO {
 
     private String key;

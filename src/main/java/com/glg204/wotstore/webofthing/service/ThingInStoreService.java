@@ -1,7 +1,6 @@
 package com.glg204.wotstore.webofthing.service;
 
 import com.glg204.wotstore.webofthing.dto.ThingInStoreDTO;
-import io.micrometer.observation.ObservationFilter;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

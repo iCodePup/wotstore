@@ -1,8 +1,8 @@
 package com.glg204.wotstore.client.controller;
 
+import com.glg204.wotstore.authentification.dto.AuthDTO;
 import com.glg204.wotstore.authentification.dto.WOTUserDTO;
 import com.glg204.wotstore.authentification.exception.EmailAlreadyExistsException;
-import com.glg204.wotstore.authentification.dto.AuthDTO;
 import com.glg204.wotstore.client.dto.ClientDTO;
 import com.glg204.wotstore.client.service.ClientService;
 import com.glg204.wotstore.config.TokenProvider;
@@ -20,8 +20,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static org.springframework.http.ResponseEntity.ok;
 
 @RestController()
 @RequestMapping("/client/create")
@@ -58,7 +56,6 @@ public class RegistrationController {
                     .status(HttpStatus.CONFLICT)
                     .body(null);
         }
-
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -79,5 +76,4 @@ public class RegistrationController {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         return tokenProvider.generate(authentication);
     }
-
 }

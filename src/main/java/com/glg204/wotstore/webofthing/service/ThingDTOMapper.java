@@ -11,8 +11,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ThingDTOMapper {
 
-    ThingDTOMapper() {
-    }
+    ThingDTOMapper() {}
 
     public static ThingDTO toDTO(Thing thing) {
         ObjectMapper mapper = new ObjectMapper();
@@ -24,5 +23,4 @@ public class ThingDTOMapper {
             throw new RuntimeException(e);
         }
     }
-
 }

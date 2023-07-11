@@ -3,12 +3,9 @@ package com.glg204.wotstore.client.dao;
 import com.glg204.wotstore.authentification.dao.WOTUserDAO;
 import com.glg204.wotstore.authentification.domain.WOTUser;
 import com.glg204.wotstore.client.domain.Client;
-import com.glg204.wotstore.webofthing.domain.ThingInStore;
-import io.webthings.webthing.Thing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -41,9 +38,7 @@ public class ClientDAOImpl implements ClientDAO {
             return ps;
 
         }, keyHolder);
-
         return (Integer) keyHolder.getKey();
-
     }
 
     @Override
@@ -123,5 +118,4 @@ public class ClientDAOImpl implements ClientDAO {
         Object[] args = new Object[]{started, thingInStoreId};
         return jdbcTemplate.update(sql, args) == 1;
     }
-
 }

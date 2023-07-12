@@ -36,14 +36,18 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests()
+                .requestMatchers(HttpMethod.POST, "/auth/login").anonymous()
                 .requestMatchers(HttpMethod.GET, "/auth/me").authenticated()
-                .requestMatchers(HttpMethod.POST, "/thinginstore/**").hasAuthority("ROLE_ADMIN")
+                .requestMatchers(HttpMethod.GET, "/thinginstore/available").hasAuthority("ROLE_CLIENT")
+                .requestMatchers(HttpMethod.GET, "/thinginstore").hasAuthority("ROLE_ADMIN")
+                .requestMatchers(HttpMethod.POST, "/thinginstore").hasAuthority("ROLE_ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/thinginstore/**").hasAuthority("ROLE_ADMIN")
-                .requestMatchers(HttpMethod.DELETE, "/client").hasAuthority("ROLE_ADMIN")
-                .requestMatchers(HttpMethod.DELETE, "/client/**").hasAuthority("ROLE_CLIENT")
-
-                //.requestMatchers("/", "/error", "/csrf", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs", "/v3/api-docs/**").permitAll()
-                .anyRequest().permitAll();
+                .requestMatchers(HttpMethod.GET, "/thing/type").hasAnyAuthority("ROLE_CLIENT", "ROLE_ADMIN")
+                .requestMatchers(HttpMethod.GET, "/client").hasAuthority("ROLE_ADMIN")
+                .requestMatchers(HttpMethod.GET, "/client/**").hasAuthority("ROLE_CLIENT")
+                .requestMatchers(HttpMethod.POST, "/client/**").hasAuthority("ROLE_CLIENT")
+                .requestMatchers("/", "/error", "/csrf", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs", "/v3/api-docs/**").permitAll();
+        //.anyRequest().permitAll();
         http.addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         //http.exceptionHandling(e -> e.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)));
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

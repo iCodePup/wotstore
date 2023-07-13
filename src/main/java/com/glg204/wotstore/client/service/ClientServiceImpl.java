@@ -85,7 +85,7 @@ public class ClientServiceImpl implements ClientService {
     public boolean startThingInStore(Long thingInStoreId) {
         Optional<ThingInStore> thingInStore = thingInStoreDAO.getThingInStoreById(thingInStoreId);
         if (thingInStore.isPresent()) {
-            if (webThingServerService.startThing(thingInStore.get().getThing())) {
+            if (webThingServerService.startThing(thingInStore.get().getId(), thingInStore.get().getThing())) {
                 return clientDAO.setStatusToThingInStore(thingInStoreId, true);
             }
         }
@@ -96,7 +96,7 @@ public class ClientServiceImpl implements ClientService {
     public boolean stopThingInStore(Long thingInStoreId) {
         Optional<ThingInStore> thingInStore = thingInStoreDAO.getThingInStoreById(thingInStoreId);
         if (thingInStore.isPresent()) {
-            if (webThingServerService.stopThing(thingInStore.get())) {
+            if (webThingServerService.stopThing(thingInStore.get().getId())) {
                 return clientDAO.setStatusToThingInStore(thingInStoreId, false);
             }
         }

@@ -10,9 +10,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Handler;
 
 @Service
 public class WebThingServerService {
@@ -22,51 +22,58 @@ public class WebThingServerService {
 
     private List<Thing> things = new ArrayList<>();
 
+    ConcurrentHashMap<Long, WebThingServer> servers = new ConcurrentHashMap<>();
+
     @Autowired
     ThingInStoreDAO thingInStoreDAO;
 
     @PostConstruct
     public void init() {
-        connect();
         startThings(); //ajouter toutes les things déja démarré à la liste pour le démarrage
     }
 
-    private void connect() {
-        try {
-            WebThingServer server = new WebThingServer(new WebThingServer.MultipleThings(things, "WOTThings"),
-                    port);
-            Runtime.getRuntime().addShutdownHook(new Thread(server::stop));
-            server.start(false);
-        } catch (IOException e) {
-            System.exit(1);
-        }
-    }
-
     private void startThings() {
+
         List<Optional<ThingInStore>> list = thingInStoreDAO.getThingsInStore();
         for (Optional<ThingInStore> l : list) {
             if (l.isPresent()) {
                 ThingInStore thingInStore = l.get();
                 if (thingInStore.isStarted()) {
-                    startThing(thingInStore.getThing());
+                    startThing(thingInStore.getId(), thingInStore.getThing());
                 }
             }
         }
     }
 
-    public boolean startThing(Thing thing) {
-        if (things.stream().noneMatch(t -> t.getId().equals(thing.getId()))) {
-            return things.add(thing);
+    public boolean startThing(long thingInStoreId, Thing thing) {
+        try {
+            if (servers.containsKey(thingInStoreId)) {
+                WebThingServer server = servers.get(thingInStoreId);
+                if (!server.isAlive()) {
+                    server.start(true);
+                    return true;
+                }
+            } else {
+                WebThingServer server = new WebThingServer(new WebThingServer.SingleThing(thing),
+                        port++);
+                server.start(true);
+                servers.put(thingInStoreId, server);
+                return true;
+            }
+        } catch (IOException e) {
         }
         return false;
     }
 
-    public boolean stopThing(ThingInStore thingInStore) {
-        if (thingInStore.isStarted()) {
-            return things.removeIf(thing -> thing.getId().equals(thingInStore.getThing().getId()));
-        } else {
-            return false;
+    public boolean stopThing(long thingInStoreId) {
+        if (servers.containsKey(thingInStoreId)) {
+            WebThingServer server = servers.get(thingInStoreId);
+            if (server.isAlive()) {
+                server.stop();
+                return true;
+            }
         }
+        return false;
     }
 }
 

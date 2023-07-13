@@ -37,6 +37,7 @@ public class WebSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests()
                 .requestMatchers(HttpMethod.POST, "/auth/login").anonymous()
+                .requestMatchers(HttpMethod.POST, "/client/create").anonymous()
                 .requestMatchers(HttpMethod.GET, "/auth/me").authenticated()
                 .requestMatchers(HttpMethod.GET, "/thinginstore/available").hasAuthority("ROLE_CLIENT")
                 .requestMatchers(HttpMethod.GET, "/thinginstore").hasAuthority("ROLE_ADMIN")

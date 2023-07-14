@@ -50,17 +50,19 @@ public class WebThingServerService {
             if (servers.containsKey(thingInStoreId)) {
                 WebThingServer server = servers.get(thingInStoreId);
                 if (!server.isAlive()) {
-                    server.start(true);
+                    Runtime.getRuntime().addShutdownHook(new Thread(() -> server.stop()));
+                    server.start(false);
                     return true;
                 }
             } else {
                 WebThingServer server = new WebThingServer(new WebThingServer.SingleThing(thing),
                         port++);
-                server.start(true);
+                server.start(false);
                 servers.put(thingInStoreId, server);
                 return true;
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return false;
     }

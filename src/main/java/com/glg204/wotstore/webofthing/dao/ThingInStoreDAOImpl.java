@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Repository
@@ -38,7 +39,7 @@ public class ThingInStoreDAOImpl implements ThingInStoreDAO {
                 Double prix = rs.getDouble("prix");
                 boolean started = rs.getBoolean("started");
                 return optionalThing.map(thing -> new ThingInStore(
-                        aId, name, desc, prix,started,
+                        aId, name, desc, prix, started,
                         thing));
             });
             return thingInStore;
@@ -54,6 +55,7 @@ public class ThingInStoreDAOImpl implements ThingInStoreDAO {
             List<Optional<ThingInStore>> thingsInStore = jdbcTemplate.queryForList(sqlGetThingInStore).stream().map(row -> {
                 Optional<Thing> optionalThing = thingDAO.getById(Long.parseLong(row.get("thingid").toString()));
                 return optionalThing.map(thing -> {
+                    //mapThingToThingInStore(row,thing);...à voir...
                     ThingInStore t = new ThingInStore(
                             Long.parseLong(row.get("id").toString()),
                             String.valueOf(row.get("name")),
@@ -126,5 +128,12 @@ public class ThingInStoreDAOImpl implements ThingInStoreDAO {
         } catch (EmptyResultDataAccessException e) {
             return new ArrayList<>();
         }
+    }
+
+    private Thing mapThingToThingInStore(Map<String, Object> row, Thing thing) {
+        return new Thing(row.get("id").toString(),
+                String.valueOf(row.get("name")),
+                thing.getType(),
+                String.valueOf(row.get("description")));
     }
 }

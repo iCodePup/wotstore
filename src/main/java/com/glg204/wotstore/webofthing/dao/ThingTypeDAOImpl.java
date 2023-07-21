@@ -1,5 +1,6 @@
 package com.glg204.wotstore.webofthing.dao;
 
+import com.glg204.wotstore.webofthing.domain.ThingType;
 import io.webthings.webthing.Property;
 import io.webthings.webthing.Thing;
 import io.webthings.webthing.Value;
@@ -15,16 +16,16 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class ThingDAOImpl implements ThingDAO {
+public class ThingTypeDAOImpl implements ThingTypeDAO {
 
     @Autowired
     JdbcTemplate jdbcTemplate;
 
-    public List<Thing> getThings() {
-        String sqlGetThing = "select * from thing";
+    public List<ThingType> getThingTypes() {
+        String sqlGetThing = "select * from thing_type";
         try {
-            List<Thing> things = jdbcTemplate.queryForList(sqlGetThing).stream().map(row -> {
-                Thing t = new Thing(String.valueOf(row.get("id")),
+            List<ThingType> things = jdbcTemplate.queryForList(sqlGetThing).stream().map(row -> {
+                ThingType t = new ThingType(String.valueOf(row.get("id")),
                         String.valueOf(row.get("title")),
                         new JSONArray(row.get("typeAsJson").toString()),
                         String.valueOf(row.get("description")));
@@ -37,11 +38,11 @@ public class ThingDAOImpl implements ThingDAO {
         }
     }
 
-    public Optional<Thing> getByTitle(String title) {
-        String sqlGetThing = "select * from thing where title = ?";
+    public Optional<ThingType> getByTitle(String title) {
+        String sqlGetThing = "select * from thing_type where title = ?";
         try {
-            Thing thing = jdbcTemplate.queryForObject(sqlGetThing, new Object[]{title}, (rs, rowNum) ->
-                    new Thing(rs.getString("id"),
+            ThingType thing = jdbcTemplate.queryForObject(sqlGetThing, new Object[]{title}, (rs, rowNum) ->
+                    new ThingType(rs.getString("id"),
                             rs.getString("title"),
                             new JSONArray(rs.getString("typeAsJson")),
                             rs.getString("description"))
@@ -55,11 +56,11 @@ public class ThingDAOImpl implements ThingDAO {
     }
 
     @Override
-    public Optional<Thing> getById(Long thingId) {
-        String sqlGetThing = "select * from thing where id = ?";
+    public Optional<ThingType> getById(Long thingTypeId) {
+        String sqlGetThing = "select * from thing_type where id = ?";
         try {
-            Thing thing = jdbcTemplate.queryForObject(sqlGetThing, new Object[]{thingId}, (rs, rowNum) ->
-                    new Thing(String.valueOf(rs.getInt("id")),
+            ThingType thing = jdbcTemplate.queryForObject(sqlGetThing, new Object[]{thingTypeId}, (rs, rowNum) ->
+                    new ThingType(String.valueOf(rs.getInt("id")),
                             rs.getString("title"),
                             new JSONArray(rs.getString("typeAsJson")),
                             rs.getString("description"))
@@ -72,10 +73,14 @@ public class ThingDAOImpl implements ThingDAO {
         }
     }
 
-    private List<Property> getThingProperties(Thing thing) {
-        String sqlGetProperties = "select * from thing_property where thingid = ?";
-        Integer thingId = Integer.parseInt(thing.getId());
-        List<Property> properties = jdbcTemplate.queryForList(sqlGetProperties, new Object[]{thingId}).stream().map(row -> {
+    private List<Property> getThingProperties(ThingType thingType) {
+        String sqlGetProperties = "select * from thing_property where thingtypeid = ?";
+        Integer thingTypeId = Integer.parseInt(thingType.getId());
+        List<Property> properties = jdbcTemplate.queryForList(sqlGetProperties, new Object[]{thingTypeId}).stream().map(row -> {
+            Thing thing = new Thing(thingType.getId(), thingType.getTitle(), thingType.getTypeAsJson(), thingType.getDescription());
+            thingType.getProperties().forEach((key, value) -> {
+                thing.addProperty(value);
+            });
             Property p = new Property(thing, String.valueOf(row.get("name")), new Value<>(row.get("value")), new JSONObject(row.get("metadataasjson").toString()));
             return p;
         }).toList();

@@ -1,9 +1,9 @@
 package com.glg204.wotstore.webofthing.service;
 
-import com.glg204.wotstore.webofthing.dao.ThingDAO;
 import com.glg204.wotstore.webofthing.dao.ThingInStoreDAO;
+import com.glg204.wotstore.webofthing.dao.ThingTypeDAO;
+import com.glg204.wotstore.webofthing.domain.ThingType;
 import com.glg204.wotstore.webofthing.dto.ThingInStoreDTO;
-import io.webthings.webthing.Thing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +18,7 @@ public class ThingInStoreServiceImpl implements ThingInStoreService {
     private ThingInStoreDAO thingInStoreDAO;
 
     @Autowired
-    private ThingDAO thingDAO;
+    private ThingTypeDAO thingTypeDAO;
 
     @Autowired
     private ThingInStoreDTOMapper thingInStoreDTOMapper;
@@ -38,9 +38,9 @@ public class ThingInStoreServiceImpl implements ThingInStoreService {
 
     @Override
     public Optional<Long> save(ThingInStoreDTO thingInStoreDTO) {
-        Optional<Thing> optionalThing = thingDAO.getById(Long.parseLong(thingInStoreDTO.getThingId()));
-        return optionalThing.map(thing -> {
-            Long id = thingInStoreDAO.save(thingInStoreDTOMapper.fromCreationDTO(thingInStoreDTO, thing));
+        Optional<ThingType> optionalThingType = thingTypeDAO.getById(Long.parseLong(thingInStoreDTO.getThingTypeId()));
+        return optionalThingType.map(thingType -> {
+            Long id = thingInStoreDAO.save(thingInStoreDTOMapper.fromCreationDTO(thingInStoreDTO, thingType));
             return Optional.of(id);
         }).orElseGet(() -> Optional.empty());
     }

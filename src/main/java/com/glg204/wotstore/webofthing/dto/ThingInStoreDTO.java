@@ -5,7 +5,7 @@ import com.glg204.wotstore.client.dto.ClientDTO;
 public class ThingInStoreDTO {
 
     private Long id;
-    private String thingId;
+    private String thingTypeId;
     private String name;
     private String description;
     private Double prix;
@@ -15,9 +15,9 @@ public class ThingInStoreDTO {
     public ThingInStoreDTO() {
     }
 
-    public ThingInStoreDTO(Long id, String thingId, String name, String description, Double prix, boolean started) {
+    public ThingInStoreDTO(Long id, String thingTypeId, String name, String description, Double prix, boolean started) {
         this.id = id;
-        this.thingId = thingId;
+        this.thingTypeId = thingTypeId;
         this.name = name;
         this.description = description;
         this.prix = prix;
@@ -41,12 +41,12 @@ public class ThingInStoreDTO {
         this.id = id;
     }
 
-    public String getThingId() {
-        return thingId;
+    public String getThingTypeId() {
+        return thingTypeId;
     }
 
-    public void setThingId(String thingId) {
-        this.thingId = thingId;
+    public void setThingTypeId(String thingTypeId) {
+        this.thingTypeId = thingTypeId;
     }
 
     public String getName() {

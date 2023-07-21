@@ -15,6 +15,8 @@ public class ThingInStore {
 
     private boolean started;
 
+    private ThingType thingType;
+
     private Thing thing;
 
     private Client client;
@@ -22,12 +24,13 @@ public class ThingInStore {
     public ThingInStore() {
     }
 
-    public ThingInStore(Long id, String name, String description, Double prix, boolean started, Thing thing) {
+    public ThingInStore(Long id, String name, String description, Double prix, boolean started, ThingType thingType, Thing thing) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.prix = prix;
         this.started = started;
+        this.thingType = thingType;
         this.thing = thing;
     }
 
@@ -61,6 +64,15 @@ public class ThingInStore {
 
     public void setPrix(Double prix) {
         this.prix = prix;
+    }
+
+
+    public ThingType getThingType() {
+        return thingType;
+    }
+
+    public void setThingType(ThingType thingType) {
+        this.thingType = thingType;
     }
 
     public Thing getThing() {

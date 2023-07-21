@@ -21,7 +21,7 @@ create table wot_user
     password  varchar(500) not null
 );
 
-create table thing
+create table thing_type
 (
     id          SERIAL PRIMARY KEY,
     title       VARCHAR(100) NOT NULL,
@@ -52,11 +52,11 @@ alter table client
     add foreign key (email) references wot_user (email);
 
 alter table thing_property
-    add column thingid SERIAL,
-    add foreign key (thingid) references thing (id);
+    add column thingtypeid SERIAL,
+    add foreign key (thingtypeid) references thing_type (id);
 
 alter table thing_in_store
-    add column thingid SERIAL NOT NULL,
+    add column thingtypeid SERIAL NOT NULL,
     add column clientid INT NULL DEFAULT NULL,
-    add foreign key (thingid) references thing (id),
+    add foreign key (thingtypeid) references thing_type (id),
     add foreign key (clientid) references client (id);

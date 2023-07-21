@@ -43,7 +43,7 @@ public class WebSecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/thinginstore").hasAuthority("ROLE_ADMIN")
                 .requestMatchers(HttpMethod.POST, "/thinginstore").hasAuthority("ROLE_ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/thinginstore/**").hasAuthority("ROLE_ADMIN")
-                .requestMatchers(HttpMethod.GET, "/thing/type").hasAnyAuthority("ROLE_CLIENT", "ROLE_ADMIN")
+                .requestMatchers(HttpMethod.GET, "/thingtype").hasAnyAuthority("ROLE_CLIENT", "ROLE_ADMIN")
                 .requestMatchers(HttpMethod.GET, "/client").hasAuthority("ROLE_ADMIN")
                 .requestMatchers(HttpMethod.GET, "/client/**").hasAuthority("ROLE_CLIENT")
                 .requestMatchers(HttpMethod.POST, "/client/**").hasAuthority("ROLE_CLIENT")

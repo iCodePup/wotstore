@@ -20,7 +20,7 @@ public class WebThingServerService {
     @Value("${app.webthingserver.port}")
     private int port;
 
-    private List<Thing> things = new ArrayList<>();
+    private final List<Thing> things = new ArrayList<>();
 
     ConcurrentHashMap<Long, WebThingServer> servers = new ConcurrentHashMap<>();
 

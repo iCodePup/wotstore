@@ -29,6 +29,7 @@ public class WebThingServerService {
 
     @PostConstruct
     public void init() {
+        System.setProperty("java.net.preferIPv4Stack", "true");
         startThings(); //ajouter toutes les things déja démarré à la liste pour le démarrage
     }
 
@@ -50,15 +51,24 @@ public class WebThingServerService {
             if (servers.containsKey(thingInStoreId)) {
                 WebThingServer server = servers.get(thingInStoreId);
                 if (!server.isAlive()) {
-                    Runtime.getRuntime().addShutdownHook(new Thread(() -> server.stop()));
                     server.start(false);
+                    Runtime.getRuntime().addShutdownHook(new Thread(server::stop));
+
                     return true;
                 }
             } else {
+                int maxPort = servers.values().stream()
+                        .mapToInt(WebThingServer::getListeningPort)
+                        .max()
+                        .orElse(port);
+                maxPort = maxPort + 1;
+
                 WebThingServer server = new WebThingServer(new WebThingServer.SingleThing(thing),
-                        port++);
+                        maxPort);
+
                 server.start(false);
                 servers.put(thingInStoreId, server);
+                Runtime.getRuntime().addShutdownHook(new Thread(server::stop));
                 return true;
             }
         } catch (Exception e) {

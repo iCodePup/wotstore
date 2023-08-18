@@ -66,7 +66,6 @@ public class ThingInStore {
         this.prix = prix;
     }
 
-
     public ThingType getThingType() {
         return thingType;
     }

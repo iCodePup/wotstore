@@ -67,7 +67,7 @@ public class WebThingServerService {
                         maxPort);
 
                 server.start(false);
-                servers.put(thingInStoreId, server);
+                servers.putIfAbsent(thingInStoreId, server);
                 Runtime.getRuntime().addShutdownHook(new Thread(server::stop));
                 return true;
             }

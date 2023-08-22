@@ -3,6 +3,7 @@ package com.glg204.wotstore.client.controller;
 import com.glg204.wotstore.authentification.dto.AuthDTO;
 import com.glg204.wotstore.authentification.dto.WOTUserDTO;
 import com.glg204.wotstore.authentification.exception.EmailAlreadyExistsException;
+import com.glg204.wotstore.authentification.exception.PasswordMismatchException;
 import com.glg204.wotstore.client.dto.ClientDTO;
 import com.glg204.wotstore.client.service.ClientService;
 import com.glg204.wotstore.config.TokenProvider;
@@ -38,8 +39,12 @@ public class RegistrationController {
     private TokenProvider tokenProvider;
 
     @PostMapping()
-    public ResponseEntity<AuthDTO> createAccount(@Valid @RequestBody ClientDTO clientDTO) {
+    public ResponseEntity<AuthDTO> createAccount(@Valid @RequestBody ClientDTO clientDTO) throws EmailAlreadyExistsException {
 
+        // Check if password and repassword fields are equal
+        if (!clientDTO.getPassword().equals(clientDTO.getConfirmPassword())) {
+            throw new PasswordMismatchException("Password et repassword ne correspondent pas.");
+        }
         try {
             clientService.save(passwordEncoder, clientDTO);
             String token = authenticateAndGetToken(clientDTO.getEmail(), clientDTO.getPassword());
@@ -52,24 +57,29 @@ public class RegistrationController {
             AuthDTO registeredDTO = new AuthDTO(registeredClientDTO, token);
             return ResponseEntity.ok(registeredDTO);
         } catch (EmailAlreadyExistsException e) {
-            return ResponseEntity
-                    .status(HttpStatus.CONFLICT)
-                    .body(null);
+            throw new EmailAlreadyExistsException("Adresse email déja utilisée");
         }
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Map<String, String> handleValidationExceptions(
-            MethodArgumentNotValidException ex) {
-        //todo add verification double password
-        Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getAllErrors().forEach((error) -> {
-            String fieldName = ((FieldError) error).getField();
-            String errorMessage = error.getDefaultMessage();
-            errors.put(fieldName, errorMessage);
-        });
-        return errors;
+    @ExceptionHandler({MethodArgumentNotValidException.class, PasswordMismatchException.class, EmailAlreadyExistsException.class})
+    public ResponseEntity<Object> handleValidationExceptions(Exception ex) {
+        StringBuilder builder = new StringBuilder();
+
+        if (ex instanceof MethodArgumentNotValidException) {
+            MethodArgumentNotValidException validationException = (MethodArgumentNotValidException) ex;
+            validationException.getBindingResult().getAllErrors().forEach((error) -> {
+                String fieldName = ((FieldError) error).getField();
+                String errorMessage = error.getDefaultMessage();
+                builder.append(String.format("%s: %s ", fieldName, errorMessage));
+            });
+        } else if (ex != null) {
+            builder.append(ex.getMessage());
+        }
+
+        String responseMessage = builder.toString().trim();
+        String jsonResponse = String.format("{\"message\": \"%s\"}", responseMessage);
+        return ResponseEntity.badRequest().body(jsonResponse);
     }
 
     private String authenticateAndGetToken(String username, String password) {

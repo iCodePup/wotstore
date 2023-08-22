@@ -49,7 +49,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public Integer save(PasswordEncoder passwordEncoder, @Valid ClientDTO clientDTO) throws EmailAlreadyExistsException {
         if (wotUserService.existsByEmail(clientDTO.getEmail())) {
-            throw new EmailAlreadyExistsException();
+            throw new EmailAlreadyExistsException("Adresse email déja utilisée");
         } else {
 
             WOTUser wotUser = wotUserService.save(passwordEncoder, clientDTO);

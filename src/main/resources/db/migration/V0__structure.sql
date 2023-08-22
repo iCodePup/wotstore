@@ -8,7 +8,7 @@ CREATE TABLE client
 (
     id        SERIAL PRIMARY KEY,
     telephone VARCHAR(10),
-    address   VARCHAR(50)
+    address   VARCHAR(200)
 );
 
 create table wot_user

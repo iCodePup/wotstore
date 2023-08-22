@@ -1,15 +1,26 @@
 package com.glg204.wotstore.webofthing.dto;
 
 import com.glg204.wotstore.client.dto.ClientDTO;
+import jakarta.validation.constraints.NotNull;
 
 public class ThingInStoreDTO {
 
     private Long id;
+
+    @NotNull
     private String thingTypeId;
+
+    @NotNull
     private String name;
+
+    @NotNull
     private String description;
+
+    @NotNull
     private Double prix;
+
     private boolean started;
+
     private ClientDTO client;
 
     public ThingInStoreDTO() {

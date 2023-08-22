@@ -1,5 +1,7 @@
 package com.glg204.wotstore.webofthing.controller;
 
+import com.glg204.wotstore.authentification.exception.EmailAlreadyExistsException;
+import com.glg204.wotstore.authentification.exception.PasswordMismatchException;
 import com.glg204.wotstore.webofthing.dto.ThingInStoreDTO;
 import com.glg204.wotstore.webofthing.service.ThingInStoreService;
 import jakarta.validation.Valid;
@@ -51,15 +53,21 @@ public class ThingInStoreController {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Map<String, String> handleValidationExceptions(
-            MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getAllErrors().forEach((error) -> {
-            String fieldName = ((FieldError) error).getField();
-            String errorMessage = error.getDefaultMessage();
-            errors.put(fieldName, errorMessage);
-        });
-        return errors;
+    @ExceptionHandler({MethodArgumentNotValidException.class})
+    public ResponseEntity<Object> handleValidationExceptions(Exception ex) {
+        StringBuilder builder = new StringBuilder();
+
+        if (ex instanceof MethodArgumentNotValidException) {
+            MethodArgumentNotValidException validationException = (MethodArgumentNotValidException) ex;
+            validationException.getBindingResult().getAllErrors().forEach((error) -> {
+                String fieldName = ((FieldError) error).getField();
+                String errorMessage = error.getDefaultMessage();
+                builder.append(String.format("%s: %s ", fieldName, errorMessage));
+            });
+        }
+
+        String responseMessage = builder.toString().trim();
+        String jsonResponse = String.format("{\"message\": \"%s\"}", responseMessage);
+        return ResponseEntity.badRequest().body(jsonResponse);
     }
 }

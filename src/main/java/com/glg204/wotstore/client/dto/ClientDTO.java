@@ -1,10 +1,12 @@
 package com.glg204.wotstore.client.dto;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 
 public class ClientDTO {
 
     @NotNull
+    @Email
     private String email;
 
     @NotNull

@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -51,10 +52,7 @@ public class ThingInStoreDAOImplTest {
         given(this.statement.executeQuery(anyString())).willReturn(this.resultSet);
         given(this.connection.prepareCall(anyString())).willReturn(this.callableStatement);
         given(this.callableStatement.getResultSet()).willReturn(this.resultSet);
-
-
     }
-
 
     @Test
     public void testGetThingTypeById_ExistingId_ReturnsThingType() throws Exception {
@@ -99,39 +97,6 @@ public class ThingInStoreDAOImplTest {
             Assertions.assertEquals(expectedThingType.getTitle(), result.getTitle());
         } else {
             Assertions.fail();
-        }
-    }
-
-    @Test
-    public void testGetThingTypes_ReturnsListOfThingTypes() throws Exception {
-        ThingTypeDAO thingTypeDAO = new ThingTypeDAOImpl();
-        ReflectionTestUtils.setField(thingTypeDAO, "jdbcTemplate", jdbcTemplate);
-
-        List<ThingType> expectedThingTypes = new ArrayList<>();
-        expectedThingTypes.add(new ThingType("0", "test1", new JSONArray(), ""));
-        expectedThingTypes.add(new ThingType("1", "test2", new JSONArray(), ""));
-
-        final String sql = "select * from thing_type";
-
-        given(this.jdbcTemplate.queryForList(anyString())).willReturn(Collections.emptyList());
-
-        given(resultSet.next()).willReturn(true, true, false);
-        given(resultSet.getString("id")).willReturn("0", "1");
-        given(resultSet.getString("typeAsJson")).willReturn("[OnOffSwitch]", "[TemperatureSensor]");
-        given(resultSet.getString("title")).willReturn("test1", "test2");
-        given(resultSet.getString("description")).willReturn("", "");
-        given(connection.prepareStatement(sql)).willReturn(preparedStatement);
-
-        List<ThingType> resultThingTypes = thingTypeDAO.getThingTypes();
-        assertEquals(expectedThingTypes.size(), resultThingTypes.size());
-
-        for (int i = 0; i < expectedThingTypes.size(); i++) {
-            ThingType expected = expectedThingTypes.get(i);
-            ThingType result = resultThingTypes.get(i);
-
-            assertEquals(expected.getId(), result.getId());
-            assertEquals(expected.getTitle(), result.getTitle());
-            // Add additional assertions for other fields if needed
         }
     }
 

@@ -11,11 +11,19 @@ import org.springframework.stereotype.Service;
 @Service
 public class ThingTypeDTOMapper {
 
-    public static ThingTypeDTO toDTO(ThingType thing) {
+    public ThingTypeDTO toDTO(ThingType thing) {
         ObjectMapper mapper = new ObjectMapper();
         try {
-            JsonNode type = mapper.readTree(thing.getTypeAsJson().toString());
-            JsonNode properties = mapper.readTree(thing.getProperties().toString());
+            JsonNode type = null;
+            if (thing.getTypeAsJson() != null) {
+                type = mapper.readTree(thing.getTypeAsJson().toString());
+            }
+
+            JsonNode properties = null;
+            if (thing.getProperties() != null) {
+                properties = mapper.readTree(thing.getProperties().toString());
+            }
+
             return new ThingTypeDTO(thing.getId(), thing.getTitle(), type, thing.getDescription(), properties);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);

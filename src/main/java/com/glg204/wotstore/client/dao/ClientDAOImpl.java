@@ -46,14 +46,18 @@ public class ClientDAOImpl implements ClientDAO {
         String sqlGetThing = "select * from client";
         try {
             return jdbcTemplate.queryForList(sqlGetThing).stream().map(row -> wotUserDAO.findByEmail(String.valueOf(row.get("email"))).map(wtUser -> {
-                WOTUser wotUser = wotUserDAO.findByEmail(String.valueOf(row.get("email"))).get();
-                Client c = new Client(
-                        Long.parseLong(row.get("id").toString()),
-                        wotUser,
-                        String.valueOf(row.get("telephone")),
-                        String.valueOf(row.get("address")));
-                return Optional.of(c);
-            }).orElseGet(() -> Optional.empty())).toList();
+                Optional<WOTUser> optionalWOTUser = wotUserDAO.findByEmail(String.valueOf(row.get("email")));
+                if (optionalWOTUser.isPresent()) {
+                    WOTUser wotUser = optionalWOTUser.get();
+                    Client c = new Client(
+                            Long.parseLong(row.get("id").toString()),
+                            wotUser,
+                            String.valueOf(row.get("telephone")),
+                            String.valueOf(row.get("address")));
+                    return Optional.of(c);
+                }
+                return Optional.<Client>empty();
+            }).orElseGet(Optional::empty)).toList();
         } catch (EmptyResultDataAccessException e) {
             return new ArrayList<>();
         }

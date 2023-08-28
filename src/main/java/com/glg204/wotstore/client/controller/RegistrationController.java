@@ -19,9 +19,6 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @RestController()
 @RequestMapping("/client/create")
 public class RegistrationController {
@@ -66,8 +63,7 @@ public class RegistrationController {
     public ResponseEntity<Object> handleValidationExceptions(Exception ex) {
         StringBuilder builder = new StringBuilder();
 
-        if (ex instanceof MethodArgumentNotValidException) {
-            MethodArgumentNotValidException validationException = (MethodArgumentNotValidException) ex;
+        if (ex instanceof MethodArgumentNotValidException validationException) {
             validationException.getBindingResult().getAllErrors().forEach((error) -> {
                 String fieldName = ((FieldError) error).getField();
                 String errorMessage = error.getDefaultMessage();

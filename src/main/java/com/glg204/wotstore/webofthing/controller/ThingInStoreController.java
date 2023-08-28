@@ -1,7 +1,5 @@
 package com.glg204.wotstore.webofthing.controller;
 
-import com.glg204.wotstore.authentification.exception.EmailAlreadyExistsException;
-import com.glg204.wotstore.authentification.exception.PasswordMismatchException;
 import com.glg204.wotstore.webofthing.dto.ThingInStoreDTO;
 import com.glg204.wotstore.webofthing.service.ThingInStoreService;
 import jakarta.validation.Valid;
@@ -12,9 +10,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController()
 @RequestMapping("/thinginstore")

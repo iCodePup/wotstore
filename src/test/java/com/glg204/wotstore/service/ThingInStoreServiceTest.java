@@ -3,13 +3,11 @@ package com.glg204.wotstore.service;
 import com.glg204.wotstore.client.domain.Client;
 import com.glg204.wotstore.client.dto.ClientDTO;
 import com.glg204.wotstore.domain.ThingMock;
-import com.glg204.wotstore.webofthing.service.ThingInStoreService;
-import com.glg204.wotstore.webofthing.dto.ThingInStoreDTO;
 import com.glg204.wotstore.webofthing.dao.ThingInStoreDAO;
 import com.glg204.wotstore.webofthing.domain.ThingInStore;
-import com.glg204.wotstore.webofthing.service.ThingInStoreDTOMapper;
-import com.glg204.wotstore.webofthing.dao.ThingTypeDAO;
 import com.glg204.wotstore.webofthing.domain.ThingType;
+import com.glg204.wotstore.webofthing.dto.ThingInStoreDTO;
+import com.glg204.wotstore.webofthing.service.ThingInStoreDTOMapper;
 import com.glg204.wotstore.webofthing.service.ThingInStoreServiceImpl;
 import org.json.JSONArray;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,8 +21,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 class ThingInStoreServiceTest {
 
@@ -100,7 +99,7 @@ class ThingInStoreServiceTest {
                 .collect(Collectors.toList());
 
         when(thingInStoreDAO.getThingsInStore()).thenReturn(mockThingList);
-        when(thingInStoreDTOMapper.toDTO(any())).thenReturn(mockDTOList.get(0)); // Adjust this based on your mapper logic
+        when(thingInStoreDTOMapper.toDTO(any())).thenReturn(mockDTOList.get(0));
 
         List<ThingInStoreDTO> result = thingInStoreService.getThingsInStore();
 

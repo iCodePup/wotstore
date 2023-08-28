@@ -10,7 +10,7 @@ public class ThingTypeSelectDTOMapper {
 
     ThingTypeSelectDTOMapper() {}
 
-    public static ThingTypeSelectDTO toDTO(ThingType thing) {
+    public ThingTypeSelectDTO toDTO(ThingType thing) {
         return new ThingTypeSelectDTO(thing.getId(), thing.getId(), thing.getTitle());
     }
 }

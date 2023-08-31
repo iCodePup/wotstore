@@ -87,5 +87,13 @@ public class WebThingServerService {
         }
         return false;
     }
+
+    public boolean deleteThing(long thingInStoreId) {
+        boolean result = this.stopThing(thingInStoreId);
+        if (servers.containsKey(thingInStoreId)) {
+            servers.remove(thingInStoreId);
+        }
+        return result;
+    }
 }
 

@@ -23,6 +23,9 @@ public class ThingInStoreServiceImpl implements ThingInStoreService {
     @Autowired
     private ThingInStoreDTOMapper thingInStoreDTOMapper;
 
+    @Autowired
+    private WebThingServerService webThingServerService;
+
     @Override
     public List<ThingInStoreDTO> getThingsInStore() {
         return thingInStoreDAO.getThingsInStore().stream()
@@ -33,6 +36,7 @@ public class ThingInStoreServiceImpl implements ThingInStoreService {
 
     @Override
     public Boolean delete(Long id) {
+        webThingServerService.deleteThing(id);
         return thingInStoreDAO.delete(id);
     }
 

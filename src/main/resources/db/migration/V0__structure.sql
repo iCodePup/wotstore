@@ -13,7 +13,7 @@ CREATE TABLE client
 
 create table wot_user
 (
-    email     varchar(20),
+    email     varchar(100),
     firstname VARCHAR(50)  NOT NULL,
     lastname  VARCHAR(50)  NOT NULL,
     primary key (email),
